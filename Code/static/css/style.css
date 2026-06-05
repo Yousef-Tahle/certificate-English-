@@ -1,0 +1,670 @@
+/* ========================================
+   المتغيرات الأساسية
+======================================== */
+:root {
+  --navy: #0f2340;
+  --navy-mid: #1a3a5c;
+  --navy-light: #2563a8;
+  --gold: #f0a500;
+  --gold-light: #ffc107;
+  --bg: #f0f4f8;
+  --bg-card: #ffffff;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+  --border: #e2e8f0;
+  --success: #0d9e6e;
+  --danger: #dc3545;
+  --info: #0ea5e9;
+  --shadow-sm: 0 2px 8px rgba(15, 35, 64, 0.08);
+  --shadow: 0 4px 24px rgba(15, 35, 64, 0.12);
+  --shadow-lg: 0 8px 40px rgba(15, 35, 64, 0.18);
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 20px;
+}
+
+/* ========================================
+   الأساس
+======================================== */
+* {
+  font-family: "Tajawal", sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ========================================
+   خلفية الصفحة
+======================================== */
+.bg-pattern {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(
+      ellipse at 10% 20%,
+      rgba(37, 99, 168, 0.06) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 90% 80%,
+      rgba(240, 165, 0, 0.05) 0%,
+      transparent 50%
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ========================================
+   الشريط العلوي
+======================================== */
+.topbar {
+  background: var(--navy);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+  padding: 6px 0;
+  position: relative;
+  z-index: 100;
+}
+
+/* ========================================
+   الـ Navbar
+======================================== */
+.main-navbar {
+  background: var(--navy-mid);
+  padding: 14px 0;
+  position: relative;
+  z-index: 100;
+  box-shadow: 0 4px 24px rgba(15, 35, 64, 0.25);
+  border-bottom: 3px solid var(--gold);
+}
+
+/* اللوقو */
+.logo-box {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--navy);
+  position: relative;
+  box-shadow: 0 4px 12px rgba(240, 165, 0, 0.35);
+  flex-shrink: 0;
+}
+.logo-ring {
+  position: absolute;
+  inset: -4px;
+  border: 2px solid rgba(240, 165, 0, 0.3);
+  border-radius: 15px;
+  animation: pulse-ring 2.5s ease-in-out infinite;
+}
+@keyframes pulse-ring {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+.brand-title {
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+}
+.brand-sub {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+}
+
+/* معلومات المستخدم */
+.nav-user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 40px;
+  padding: 6px 16px 6px 8px;
+}
+.nav-user-avatar {
+  width: 34px;
+  height: 34px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: white;
+}
+.nav-user-role {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* زر الخروج */
+.btn-logout {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(220, 53, 69, 0.15);
+  border: 1.5px solid rgba(220, 53, 69, 0.4);
+  color: #ff8a93;
+  padding: 7px 16px;
+  border-radius: 40px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+.btn-logout:hover {
+  background: rgba(220, 53, 69, 0.85);
+  border-color: #dc3545;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+/* ========================================
+   المحتوى الرئيسي
+======================================== */
+.main-content {
+  flex: 1;
+  padding: 36px 0 48px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ========================================
+   التنبيهات
+======================================== */
+.alert-custom {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 20px;
+  font-weight: 500;
+  font-size: 0.93rem;
+  transition: all 0.4s ease;
+  box-shadow: var(--shadow-sm);
+}
+.alert-custom.alert-success {
+  background: #ecfdf5;
+  border: 1px solid #6ee7b7;
+  color: #065f46;
+}
+.alert-custom.alert-danger {
+  background: #fff1f2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+}
+.alert-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.alert-close {
+  margin-right: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: inherit;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  padding: 0 4px;
+}
+.alert-close:hover {
+  opacity: 1;
+}
+
+/* ========================================
+   الكروت
+======================================== */
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  background: var(--bg-card);
+  transition: all 0.25s ease;
+  overflow: hidden;
+}
+.card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+.card-header {
+  background: linear-gradient(135deg, var(--navy-mid), var(--navy));
+  color: white;
+  padding: 16px 22px;
+  font-weight: 700;
+  font-size: 1rem;
+  border: none !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-header i {
+  color: var(--gold);
+  font-size: 1.1rem;
+}
+.card-body {
+  padding: 24px;
+}
+
+/* ========================================
+   الـ Stats Cards
+======================================== */
+.stat-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4px;
+  height: 100%;
+}
+.stat-card.blue::before {
+  background: var(--navy-light);
+}
+.stat-card.gold::before {
+  background: var(--gold);
+}
+.stat-card.green::before {
+  background: var(--success);
+}
+.stat-card.red::before {
+  background: var(--danger);
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+.stat-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+.stat-icon.blue {
+  background: rgba(37, 99, 168, 0.1);
+  color: var(--navy-light);
+}
+.stat-icon.gold {
+  background: rgba(240, 165, 0, 0.1);
+  color: var(--gold);
+}
+.stat-icon.green {
+  background: rgba(13, 158, 110, 0.1);
+  color: var(--success);
+}
+.stat-icon.red {
+  background: rgba(220, 53, 69, 0.1);
+  color: var(--danger);
+}
+.stat-value {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--navy);
+  line-height: 1;
+  font-family: "Cairo", sans-serif;
+}
+.stat-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* ========================================
+   الجداول
+======================================== */
+.table-wrapper {
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+.table {
+  margin: 0;
+  font-size: 0.92rem;
+}
+.table thead th {
+  background: linear-gradient(135deg, var(--navy-mid), var(--navy));
+  color: white;
+  font-weight: 700;
+  border: none;
+  padding: 14px 18px;
+  white-space: nowrap;
+}
+.table tbody tr {
+  transition: background 0.15s;
+  border-bottom: 1px solid var(--border);
+}
+.table tbody tr:hover {
+  background: #f8fafc;
+}
+.table td {
+  padding: 13px 18px;
+  vertical-align: middle;
+}
+
+/* ========================================
+   الأزرار
+======================================== */
+.btn {
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  padding: 9px 20px;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-primary {
+  background: var(--navy-mid);
+  border-color: var(--navy-mid);
+}
+.btn-primary:hover {
+  background: var(--navy-light);
+  border-color: var(--navy-light);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 168, 0.3);
+}
+.btn-warning {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--navy);
+}
+.btn-warning:hover {
+  background: var(--gold-light);
+  border-color: var(--gold-light);
+  color: var(--navy);
+  transform: translateY(-1px);
+}
+.btn-success {
+  background: var(--success);
+  border-color: var(--success);
+}
+.btn-outline-primary {
+  color: var(--navy-mid);
+  border-color: var(--navy-mid);
+}
+.btn-outline-primary:hover {
+  background: var(--navy-mid);
+  transform: translateY(-1px);
+}
+
+/* ========================================
+   الفورم
+======================================== */
+.form-control,
+.form-select {
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  padding: 10px 14px;
+  font-size: 0.93rem;
+  transition: all 0.2s;
+  background: #fafbfc;
+}
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--navy-light);
+  box-shadow: 0 0 0 3px rgba(37, 99, 168, 0.1);
+  background: white;
+}
+.form-label {
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+}
+
+/* ========================================
+   الـ Badges
+======================================== */
+.badge {
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+/* ========================================
+   الفوتر
+======================================== */
+.main-footer {
+  background: var(--navy);
+  padding: 18px 0;
+  position: relative;
+  z-index: 1;
+  border-top: 3px solid var(--gold);
+}
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.footer-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.2);
+}
+.footer-info {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.8rem;
+}
+
+/* ========================================
+   الأنيميشن
+======================================== */
+.fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   Responsive
+======================================== */
+@media (max-width: 768px) {
+  .topbar {
+    display: none;
+  }
+  .brand-sub {
+    display: none;
+  }
+  .main-content {
+    padding: 20px 0 32px;
+  }
+  .stat-value {
+    font-size: 1.6rem;
+  }
+}
+/* ========================================
+   عنوان الصفحة
+======================================== */
+.page-header {
+  border-right: 4px solid var(--gold);
+  padding-right: 16px;
+}
+.page-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--navy);
+  margin: 0 0 4px;
+}
+.page-sub {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+/* ========================================
+   أفاتار الطالب
+======================================== */
+.student-avatar {
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, var(--navy-mid), var(--navy-light));
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* ========================================
+   عنوان القسم بالفورم
+======================================== */
+.section-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ========================================
+   أيقونة الدورة
+======================================== */
+.course-icon {
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--navy);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* ========================================
+   أيقونة الامتحان
+======================================== */
+.exam-icon {
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, #0d9e6e, #0ea5e9);
+  color: white;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* ========================================
+   كرت الشهادة
+======================================== */
+.cert-card {
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: all 0.25s ease;
+  border: 1px solid var(--border);
+}
+.cert-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+.cert-header {
+  background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+  color: var(--gold);
+  padding: 16px 20px;
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cert-body {
+  background: var(--bg-card);
+  padding: 20px;
+}
+.cert-level {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--navy);
+  font-family: "Cairo", sans-serif;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.cert-exam {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+.cert-info {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}

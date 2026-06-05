@@ -1,0 +1,90 @@
+{% extends 'base.html' %} {% block title %}إدارة الدورات{% endblock %} {% block
+content %}
+
+<!-- عنوان الصفحة -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="page-header mb-0">
+    <h4 class="page-title">
+      <i class="bi bi-book-fill me-2"></i>
+      إدارة الدورات
+    </h4>
+    <span class="page-sub">عرض وإدارة الدورات التحضيرية المتاحة</span>
+  </div>
+  <a href="{{ url_for('admin_add_course') }}" class="btn btn-primary">
+    <i class="bi bi-plus-circle-fill"></i>
+    إضافة دورة
+  </a>
+</div>
+
+<!-- جدول الدورات -->
+<div class="card">
+  <div class="card-header">
+    <i class="bi bi-table"></i>
+    قائمة الدورات
+  </div>
+  <div class="card-body p-0">
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>اسم الدورة</th>
+            <th>الوصف</th>
+            <th>المدة (أيام)</th>
+            <th>السعر</th>
+            <th>تاريخ البدء</th>
+            <th>تاريخ الانتهاء</th>
+            <th>الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if courses %} {% for c in courses %}
+          <tr>
+            <td>{{ c.CourseID }}</td>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <div class="course-icon">
+                  <i class="bi bi-book-fill"></i>
+                </div>
+                <strong>{{ c.CourseName }}</strong>
+              </div>
+            </td>
+            <td>{{ c.Description or '—' }}</td>
+            <td>
+              <span class="badge bg-info text-dark">
+                {{ c.Duration or '—' }} يوم
+              </span>
+            </td>
+            <td>
+              <span class="badge bg-warning text-dark">
+                {{ c.Price or '—' }} ل.س
+              </span>
+            </td>
+            <td>{{ c.StartDate or '—' }}</td>
+            <td>{{ c.EndDate or '—' }}</td>
+            <td>
+              <a
+                href="{{ url_for('admin_delete_course', course_id=c.CourseID) }}"
+                class="btn btn-sm btn-danger"
+                onclick="return confirm('هل أنت متأكد من حذف هذه الدورة؟');"
+              >
+                <i class="bi bi-trash-fill"></i>
+                حذف
+              </a>
+            </td>
+          </tr>
+          {% endfor %} {% else %}
+          <tr>
+            <td colspan="8" class="text-center py-5 text-muted">
+              <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+              لا توجد دورات مضافة حتى الآن
+            </td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

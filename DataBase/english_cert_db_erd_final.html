@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>English Cert DB - Final ERD</title>
+<style>
+  body {
+    font-family: sans-serif;
+    background: #f4f4f8;
+    margin: 0;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.09);
+    padding: 2rem 2.5rem;
+    width: 100%;
+    max-width: 1100px;
+  }
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 6px;
+  }
+  .title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #26215C;
+    letter-spacing: 0.01em;
+  }
+  .subtitle {
+    font-size: 0.85rem;
+    color: #888;
+  }
+  .legend {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    font-size: 0.8rem;
+    color: #555;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-dot {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+  }
+  #erd { width: 100%; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="header">
+    <div class="title">مخطط قاعدة البيانات — نظام إدارة شهادة اللغة الإنكليزية</div>
+    <div class="subtitle">EnglishCertDB · 8 جداول · Al-Wataniya Private University</div>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#534AB7"></div> PK — المفتاح الأساسي</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#0F6E56"></div> FK — المفتاح الأجنبي</div>
+    <div class="legend-item"><span style="font-size:1rem">||--o{</span> علاقة One-to-Many</div>
+    <div class="legend-item"><span style="font-size:1rem">||--o|</span> علاقة One-to-One</div>
+  </div>
+  <div id="erd"></div>
+</div>
+<script type="module">
+import mermaid from 'https://esm.sh/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'base',
+  fontFamily: 'sans-serif',
+  themeVariables: {
+    fontSize: '13px',
+    fontFamily: 'sans-serif',
+    lineColor: '#73726c',
+    textColor: '#3d3d3a',
+    primaryColor: '#eeedfe',
+    primaryBorderColor: '#534AB7',
+    primaryTextColor: '#26215C',
+  },
+});
+const { svg } = await mermaid.render('erd-svg', `erDiagram
+  Users {
+    int UserID PK
+    nvarchar Username
+    nvarchar Password
+    nvarchar Role
+    datetime CreatedAt
+  }
+  Admins {
+    int AdminID PK
+    int UserID FK
+    nvarchar FullName
+    nvarchar Phone
+  }
+  Students {
+    int StudentID PK
+    int UserID FK
+    nvarchar FullName
+    nvarchar Email
+    nvarchar Phone
+    date BirthDate
+    nvarchar Address
+  }
+  Courses {
+    int CourseID PK
+    nvarchar CourseName
+    nvarchar Description
+    int Duration
+    decimal Price
+    date StartDate
+    date EndDate
+  }
+  Exams {
+    int ExamID PK
+    nvarchar ExamName
+    datetime ExamDate
+    nvarchar Location
+    int MaxStudents
+    decimal Fee
+  }
+  Registrations {
+    int RegID PK
+    int StudentID FK
+    int CourseID FK
+    int ExamID FK
+    datetime RegDate
+    nvarchar Status
+  }
+  Results {
+    int ResultID PK
+    int StudentID FK
+    int ExamID FK
+    decimal Score
+    nvarchar Grade
+    bit IsPassed
+    date ResultDate
+  }
+  Certificates {
+    int CertID PK
+    int StudentID FK
+    int ExamID FK
+    date IssueDate
+    nvarchar CertNumber
+    nvarchar Level
+  }
+
+  Users ||--o| Admins : "يمتلك"
+  Users ||--o| Students : "يمتلك"
+  Students ||--o{ Registrations : "يسجّل"
+  Courses ||--o{ Registrations : "تشمل"
+  Exams ||--o{ Registrations : "تشمل"
+  Students ||--o{ Results : "لديه"
+  Exams ||--o{ Results : "تحتوي"
+  Students ||--o{ Certificates : "يحصل"
+  Exams ||--o{ Certificates : "تمنح"
+`);
+document.getElementById('erd').innerHTML = svg;
+
+document.querySelectorAll('#erd svg .node').forEach(node => {
+  const firstPath = node.querySelector('path[d]');
+  if (!firstPath) return;
+  const d = firstPath.getAttribute('d');
+  const nums = d.match(/-?[\d.]+/g)?.map(Number);
+  if (!nums || nums.length < 8) return;
+  const xs = [nums[0], nums[2], nums[4], nums[6]];
+  const ys = [nums[1], nums[3], nums[5], nums[7]];
+  const x = Math.min(...xs), y = Math.min(...ys);
+  const w = Math.max(...xs) - x, h = Math.max(...ys) - y;
+  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rect.setAttribute('x', x); rect.setAttribute('y', y);
+  rect.setAttribute('width', w); rect.setAttribute('height', h);
+  rect.setAttribute('rx', '8');
+  for (const a of ['fill', 'stroke', 'stroke-width', 'class', 'style']) {
+    if (firstPath.hasAttribute(a)) rect.setAttribute(a, firstPath.getAttribute(a));
+  }
+  firstPath.replaceWith(rect);
+});
+document.querySelectorAll('#erd svg .row-rect-odd path, #erd svg .row-rect-even path').forEach(p => {
+  p.setAttribute('stroke', 'none');
+});
+</script>
+</body>
+</html>

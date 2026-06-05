@@ -1,0 +1,126 @@
+{% extends 'base.html' %} {% block title %}إضافة طالب جديد{% endblock %} {%
+block content %}
+
+<!-- عنوان الصفحة -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="page-header mb-0">
+    <h4 class="page-title">
+      <i class="bi bi-person-plus-fill me-2"></i>
+      إضافة طالب جديد
+    </h4>
+    <span class="page-sub">أدخل بيانات الطالب الجديد</span>
+  </div>
+  <a href="{{ url_for('admin_students') }}" class="btn btn-outline-primary">
+    <i class="bi bi-arrow-right"></i>
+    رجوع
+  </a>
+</div>
+
+<!-- فورم الإضافة -->
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-person-plus-fill"></i>
+        بيانات الطالب
+      </div>
+      <div class="card-body p-4">
+        <form method="POST">
+          <!-- بيانات الدخول -->
+          <div class="section-title mb-3">
+            <i class="bi bi-lock-fill me-2 text-warning"></i>
+            بيانات تسجيل الدخول
+          </div>
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label">اسم المستخدم</label>
+              <input
+                type="text"
+                name="username"
+                class="form-control"
+                placeholder="مثال: student01"
+                required
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">كلمة المرور</label>
+              <input
+                type="password"
+                name="password"
+                class="form-control"
+                placeholder="أدخل كلمة المرور"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- البيانات الشخصية -->
+          <div class="section-title mb-3">
+            <i class="bi bi-person-fill me-2 text-primary"></i>
+            البيانات الشخصية
+          </div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">الاسم الكامل</label>
+              <input
+                type="text"
+                name="fullname"
+                class="form-control"
+                placeholder="أدخل الاسم الكامل"
+                required
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">البريد الإلكتروني</label>
+              <input
+                type="email"
+                name="email"
+                class="form-control"
+                placeholder="example@email.com"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">رقم الهاتف</label>
+              <input
+                type="text"
+                name="phone"
+                class="form-control"
+                placeholder="09xxxxxxxx"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">تاريخ الميلاد</label>
+              <input type="date" name="birthdate" class="form-control" />
+            </div>
+            <div class="col-12">
+              <label class="form-label">العنوان</label>
+              <input
+                type="text"
+                name="address"
+                class="form-control"
+                placeholder="المدينة، الحي"
+              />
+            </div>
+          </div>
+
+          <!-- أزرار -->
+          <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-check-circle-fill"></i>
+              حفظ الطالب
+            </button>
+            <a
+              href="{{ url_for('admin_students') }}"
+              class="btn btn-outline-secondary"
+            >
+              <i class="bi bi-x-circle"></i>
+              إلغاء
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

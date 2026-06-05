@@ -1,0 +1,170 @@
+{% extends 'base.html' %} {% block title %}لوحة تحكم المشرف{% endblock %} {%
+block content %}
+
+<!-- عنوان الصفحة -->
+<div class="page-header mb-4">
+  <h4 class="page-title">
+    <i class="bi bi-speedometer2 me-2"></i>
+    لوحة تحكم المشرف
+  </h4>
+  <span class="page-sub">مرحباً بك، يمكنك إدارة النظام من هنا</span>
+</div>
+
+<!-- إحصائيات سريعة -->
+<div class="row g-3 mb-4">
+  <div class="col-md-3 col-sm-6">
+    <div class="stat-card blue">
+      <div class="stat-icon blue">
+        <i class="bi bi-people-fill"></i>
+      </div>
+      <div>
+        <div class="stat-value">{{ students_count }}</div>
+        <div class="stat-label">إجمالي الطلاب</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 col-sm-6">
+    <div class="stat-card gold">
+      <div class="stat-icon gold">
+        <i class="bi bi-book-fill"></i>
+      </div>
+      <div>
+        <div class="stat-value">{{ courses_count }}</div>
+        <div class="stat-label">الدورات المتاحة</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 col-sm-6">
+    <div class="stat-card green">
+      <div class="stat-icon green">
+        <i class="bi bi-clipboard2-check-fill"></i>
+      </div>
+      <div>
+        <div class="stat-value">{{ exams_count }}</div>
+        <div class="stat-label">الامتحانات</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 col-sm-6">
+    <div class="stat-card red">
+      <div class="stat-icon red">
+        <i class="bi bi-award-fill"></i>
+      </div>
+      <div>
+        <div class="stat-value">{{ certs_count }}</div>
+        <div class="stat-label">الشهادات الممنوحة</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- قائمة الإجراءات السريعة -->
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-header">
+        <i class="bi bi-people-fill"></i>
+        إدارة الطلاب
+      </div>
+      <div class="card-body d-flex flex-column">
+        <p class="text-muted small">إضافة وتعديل وحذف بيانات الطلاب المسجلين</p>
+        <a
+          href="{{ url_for('admin_students') }}"
+          class="btn btn-primary mt-auto"
+        >
+          <i class="bi bi-arrow-left"></i>
+          الذهاب للطلاب
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-header">
+        <i class="bi bi-book-fill"></i>
+        إدارة الدورات
+      </div>
+      <div class="card-body d-flex flex-column">
+        <p class="text-muted small">إضافة وتعديل الدورات التحضيرية المتاحة</p>
+        <a
+          href="{{ url_for('admin_courses') }}"
+          class="btn btn-primary mt-auto"
+        >
+          <i class="bi bi-arrow-left"></i>
+          الذهاب للدورات
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-header">
+        <i class="bi bi-clipboard2-check-fill"></i>
+        إدارة الامتحانات
+      </div>
+      <div class="card-body d-flex flex-column">
+        <p class="text-muted small">إضافة وتعديل مواعيد الامتحانات</p>
+        <a href="{{ url_for('admin_exams') }}" class="btn btn-primary mt-auto">
+          <i class="bi bi-arrow-left"></i>
+          الذهاب للامتحانات
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-header">
+        <i class="bi bi-bar-chart-fill"></i>
+        إدارة النتائج
+      </div>
+      <div class="card-body d-flex flex-column">
+        <p class="text-muted small">إدخال وعرض نتائج الطلاب</p>
+        <a
+          href="{{ url_for('admin_results') }}"
+          class="btn btn-primary mt-auto"
+        >
+          <i class="bi bi-arrow-left"></i>
+          الذهاب للنتائج
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-header">
+        <i class="bi bi-award-fill"></i>
+        إدارة الشهادات
+      </div>
+      <div class="card-body d-flex flex-column">
+        <p class="text-muted small">إصدار وعرض شهادات الطلاب الناجحين</p>
+        <a
+          href="{{ url_for('admin_certificates') }}"
+          class="btn btn-primary mt-auto"
+        >
+          <i class="bi bi-arrow-left"></i>
+          الذهاب للشهادات
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-4">
+  <div class="card h-100">
+    <div class="card-header">
+      <i class="bi bi-list-check"></i>
+      عرض التسجيلات
+    </div>
+    <div class="card-body d-flex flex-column">
+      <p class="text-muted small">عرض كل تسجيلات الطلاب بالدورات والامتحانات</p>
+      <a
+        href="{{ url_for('admin_registrations') }}"
+        class="btn btn-primary mt-auto"
+      >
+        <i class="bi bi-arrow-left"></i>
+        الذهاب للتسجيلات
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

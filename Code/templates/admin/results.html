@@ -1,0 +1,98 @@
+{% extends 'base.html' %} {% block title %}إدارة النتائج{% endblock %} {% block
+content %}
+
+<!-- عنوان الصفحة -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="page-header mb-0">
+    <h4 class="page-title">
+      <i class="bi bi-bar-chart-fill me-2"></i>
+      إدارة النتائج
+    </h4>
+    <span class="page-sub">عرض وإدخال نتائج الطلاب</span>
+  </div>
+  <a href="{{ url_for('admin_add_result') }}" class="btn btn-primary">
+    <i class="bi bi-plus-circle-fill"></i>
+    إضافة نتيجة
+  </a>
+</div>
+
+<!-- جدول النتائج -->
+<div class="card">
+  <div class="card-header">
+    <i class="bi bi-table"></i>
+    قائمة النتائج
+  </div>
+  <div class="card-body p-0">
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>اسم الطالب</th>
+            <th>الامتحان</th>
+            <th>العلامة</th>
+            <th>الدرجة</th>
+            <th>النتيجة</th>
+            <th>التاريخ</th>
+            <th>الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if results %} {% for r in results %}
+          <tr>
+            <td>{{ r.ResultID }}</td>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <div class="student-avatar">{{ r.FullName[0] }}</div>
+                {{ r.FullName }}
+              </div>
+            </td>
+            <td>{{ r.ExamName }}</td>
+            <td>
+              <strong>{{ r.Score }}</strong>
+            </td>
+            <td>
+              <span class="badge bg-info text-dark">
+                {{ r.Grade or '—' }}
+              </span>
+            </td>
+            <td>
+              {% if r.IsPassed %}
+              <span class="badge bg-success">
+                <i class="bi bi-check-circle-fill me-1"></i>
+                ناجح
+              </span>
+              {% else %}
+              <span class="badge bg-danger">
+                <i class="bi bi-x-circle-fill me-1"></i>
+                راسب
+              </span>
+              {% endif %}
+            </td>
+            <td>{{ r.ResultDate or '—' }}</td>
+            <td>
+              <a
+                href="{{ url_for('admin_delete_result', result_id=r.ResultID) }}"
+                class="btn btn-sm btn-danger"
+                onclick="return confirm('هل أنت متأكد من حذف هذه النتيجة؟');"
+              >
+                <i class="bi bi-trash-fill"></i>
+                حذف
+              </a>
+            </td>
+          </tr>
+          {% endfor %} {% else %}
+          <tr>
+            <td colspan="8" class="text-center py-5 text-muted">
+              <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+              لا توجد نتائج مدخلة حتى الآن
+            </td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

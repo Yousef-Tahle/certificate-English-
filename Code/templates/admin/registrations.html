@@ -1,0 +1,91 @@
+{% extends 'base.html' %} {% block title %}عرض التسجيلات{% endblock %} {% block
+content %}
+
+<!-- عنوان الصفحة -->
+<div class="page-header mb-4">
+  <h4 class="page-title">
+    <i class="bi bi-list-check me-2"></i>
+    عرض التسجيلات
+  </h4>
+  <span class="page-sub">عرض كل تسجيلات الطلاب بالدورات والامتحانات</span>
+</div>
+
+<!-- جدول التسجيلات -->
+<div class="card">
+  <div class="card-header">
+    <i class="bi bi-table"></i>
+    قائمة التسجيلات
+  </div>
+  <div class="card-body p-0">
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>اسم الطالب</th>
+            <th>الدورة</th>
+            <th>الامتحان</th>
+            <th>تاريخ التسجيل</th>
+            <th>الحالة</th>
+            <th>الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if registrations %} {% for r in registrations %}
+          <tr>
+            <td>{{ r.RegID }}</td>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <div class="student-avatar">{{ r.FullName[0] }}</div>
+                {{ r.FullName }}
+              </div>
+            </td>
+            <td>{{ r.CourseName or '—' }}</td>
+            <td>{{ r.ExamName or '—' }}</td>
+            <td>{{ r.RegDate or '—' }}</td>
+            <td>
+              {% if r.Status == 'Confirmed' %}
+              <span class="badge bg-success">مؤكد</span>
+              {% elif r.Status == 'Cancelled' %}
+              <span class="badge bg-danger">ملغي</span>
+              {% else %}
+              <span class="badge bg-warning text-dark">قيد الانتظار</span>
+              {% endif %}
+            </td>
+            <td>
+              <div class="d-flex gap-1">
+                {% if r.Status != 'Confirmed' %}
+                <a
+                  href="{{ url_for('admin_update_registration', reg_id=r.RegID, status='Confirmed') }}"
+                  class="btn btn-sm btn-success"
+                >
+                  <i class="bi bi-check-circle-fill"></i>
+                  تأكيد
+                </a>
+                {% endif %} {% if r.Status != 'Cancelled' %}
+                <a
+                  href="{{ url_for('admin_update_registration', reg_id=r.RegID, status='Cancelled') }}"
+                  class="btn btn-sm btn-danger"
+                >
+                  <i class="bi bi-x-circle-fill"></i>
+                  إلغاء
+                </a>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+          {% endfor %} {% else %}
+          <tr>
+            <td colspan="7" class="text-center py-5 text-muted">
+              <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+              لا توجد تسجيلات حتى الآن
+            </td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

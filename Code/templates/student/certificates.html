@@ -1,0 +1,57 @@
+{% extends 'base.html' %} {% block title %}شهاداتي{% endblock %} {% block
+content %}
+
+<!-- عنوان الصفحة -->
+<div class="page-header mb-4">
+  <h4 class="page-title">
+    <i class="bi bi-award-fill me-2"></i>
+    شهاداتي
+  </h4>
+  <span class="page-sub">عرض شهاداتك الممنوحة</span>
+</div>
+
+{% if certificates %}
+<div class="row g-3">
+  {% for c in certificates %}
+  <div class="col-md-6">
+    <div class="cert-card">
+      <div class="cert-header">
+        <i class="bi bi-award-fill"></i>
+        شهادة اللغة الإنكليزية
+      </div>
+      <div class="cert-body">
+        <div class="cert-level">{{ c.Level or 'غير محدد' }}</div>
+        <div class="cert-exam">{{ c.ExamName }}</div>
+        <div class="cert-info">
+          <span>
+            <i class="bi bi-hash me-1"></i>
+            {{ c.CertNumber }}
+          </span>
+          <span>
+            <i class="bi bi-calendar-fill me-1"></i>
+            {{ c.IssueDate or '—' }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="card">
+  <div class="card-body text-center py-5 text-muted">
+    <i class="bi bi-award fs-1 d-block mb-2"></i>
+    لا توجد شهادات ممنوحة حتى الآن
+  </div>
+</div>
+{% endif %}
+
+<!-- زر الرجوع -->
+<div class="mt-3">
+  <a href="{{ url_for('student_dashboard') }}" class="btn btn-outline-primary">
+    <i class="bi bi-arrow-right"></i>
+    رجوع للرئيسية
+  </a>
+</div>
+
+{% endblock %}

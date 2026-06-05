@@ -1,0 +1,87 @@
+{% extends 'base.html' %} {% block title %}إدارة الشهادات{% endblock %} {% block
+content %}
+
+<!-- عنوان الصفحة -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="page-header mb-0">
+    <h4 class="page-title">
+      <i class="bi bi-award-fill me-2"></i>
+      إدارة الشهادات
+    </h4>
+    <span class="page-sub">عرض وإصدار شهادات الطلاب الناجحين</span>
+  </div>
+  <a href="{{ url_for('admin_add_certificate') }}" class="btn btn-primary">
+    <i class="bi bi-plus-circle-fill"></i>
+    إصدار شهادة
+  </a>
+</div>
+
+<!-- جدول الشهادات -->
+<div class="card">
+  <div class="card-header">
+    <i class="bi bi-table"></i>
+    قائمة الشهادات
+  </div>
+  <div class="card-body p-0">
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>اسم الطالب</th>
+            <th>الامتحان</th>
+            <th>رقم الشهادة</th>
+            <th>المستوى</th>
+            <th>تاريخ الإصدار</th>
+            <th>الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if certificates %} {% for c in certificates %}
+          <tr>
+            <td>{{ c.CertID }}</td>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <div class="student-avatar">{{ c.FullName[0] }}</div>
+                {{ c.FullName }}
+              </div>
+            </td>
+            <td>{{ c.ExamName }}</td>
+            <td>
+              <span class="badge bg-secondary">
+                <i class="bi bi-hash me-1"></i>
+                {{ c.CertNumber }}
+              </span>
+            </td>
+            <td>
+              <span class="badge bg-warning text-dark">
+                {{ c.Level or '—' }}
+              </span>
+            </td>
+            <td>{{ c.IssueDate or '—' }}</td>
+            <td>
+              <a
+                href="{{ url_for('admin_delete_certificate', cert_id=c.CertID) }}"
+                class="btn btn-sm btn-danger"
+                onclick="return confirm('هل أنت متأكد من حذف هذه الشهادة؟');"
+              >
+                <i class="bi bi-trash-fill"></i>
+                حذف
+              </a>
+            </td>
+          </tr>
+          {% endfor %} {% else %}
+          <tr>
+            <td colspan="7" class="text-center py-5 text-muted">
+              <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+              لا توجد شهادات مصدرة حتى الآن
+            </td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

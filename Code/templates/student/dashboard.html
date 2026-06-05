@@ -1,0 +1,141 @@
+{% extends 'base.html' %} {% block title %}لوحة الطالب{% endblock %} {% block
+content %}
+
+<!-- عنوان الصفحة -->
+<div class="page-header mb-4">
+  <h4 class="page-title">
+    <i class="bi bi-mortarboard-fill me-2"></i>
+    لوحة الطالب
+  </h4>
+  <span class="page-sub">مرحباً بك، يمكنك متابعة دوراتك وامتحاناتك من هنا</span>
+</div>
+
+<!-- إحصائيات سريعة -->
+<div class="row g-3 mb-4">
+  <div class="col-md-4 col-sm-6">
+    <div class="stat-card blue">
+      <div class="stat-icon blue">
+        <i class="bi bi-book-fill"></i>
+      </div>
+      <div>
+        <div class="stat-value">0</div>
+        <div class="stat-label">دوراتي المسجلة</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-sm-6">
+    <div class="stat-card green">
+      <div class="stat-icon green">
+        <i class="bi bi-clipboard2-check-fill"></i>
+      </div>
+      <div>
+        <div class="stat-value">0</div>
+        <div class="stat-label">امتحاناتي</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-sm-6">
+    <div class="stat-card gold">
+      <div class="stat-icon gold">
+        <i class="bi bi-award-fill"></i>
+      </div>
+      <div>
+        <div class="stat-value">0</div>
+        <div class="stat-label">شهاداتي</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- قائمة الإجراءات -->
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-header">
+        <i class="bi bi-book-fill"></i>
+        الدورات المتاحة
+      </div>
+      <div class="card-body d-flex flex-column">
+        <p class="text-muted small">تصفح وسجّل في الدورات التحضيرية المتاحة</p>
+        <a
+          href="{{ url_for('student_register') }}"
+          class="btn btn-primary mt-auto"
+        >
+          <i class="bi bi-arrow-left"></i>
+          عرض الدورات
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-header">
+        <i class="bi bi-clipboard2-check-fill"></i>
+        الامتحانات المتاحة
+      </div>
+      <div class="card-body d-flex flex-column">
+        <p class="text-muted small">تصفح وسجّل في مواعيد الامتحانات</p>
+        <a
+          href="{{ url_for('student_register') }}"
+          class="btn btn-primary mt-auto"
+        >
+          <i class="bi bi-arrow-left"></i>
+          عرض الامتحانات
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-header">
+        <i class="bi bi-bar-chart-fill"></i>
+        نتائجي
+      </div>
+      <div class="card-body d-flex flex-column">
+        <p class="text-muted small">عرض نتائج امتحاناتك</p>
+        <a
+          href="{{ url_for('student_results') }}"
+          class="btn btn-primary mt-auto"
+        >
+          <i class="bi bi-arrow-left"></i>
+          عرض النتائج
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-header">
+        <i class="bi bi-award-fill"></i>
+        شهاداتي
+      </div>
+      <div class="card-body d-flex flex-column">
+        <p class="text-muted small">عرض شهاداتك الممنوحة</p>
+        <a
+          href="{{ url_for('student_certificates') }}"
+          class="btn btn-primary mt-auto"
+        >
+          <i class="bi bi-arrow-left"></i>
+          عرض الشهادات
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-header">
+        <i class="bi bi-person-fill"></i>
+        ملفي الشخصي
+      </div>
+      <div class="card-body d-flex flex-column">
+        <p class="text-muted small">عرض وتعديل بياناتك الشخصية</p>
+        <a href="#" class="btn btn-primary mt-auto">
+          <i class="bi bi-arrow-left"></i>
+          عرض الملف
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

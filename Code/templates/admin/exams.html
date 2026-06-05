@@ -1,0 +1,93 @@
+{% extends 'base.html' %} {% block title %}إدارة الامتحانات{% endblock %} {%
+block content %}
+
+<!-- عنوان الصفحة -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="page-header mb-0">
+    <h4 class="page-title">
+      <i class="bi bi-clipboard2-check-fill me-2"></i>
+      إدارة الامتحانات
+    </h4>
+    <span class="page-sub">عرض وإدارة مواعيد الامتحانات</span>
+  </div>
+  <a href="{{ url_for('admin_add_exam') }}" class="btn btn-primary">
+    <i class="bi bi-plus-circle-fill"></i>
+    إضافة امتحان
+  </a>
+</div>
+
+<!-- جدول الامتحانات -->
+<div class="card">
+  <div class="card-header">
+    <i class="bi bi-table"></i>
+    قائمة الامتحانات
+  </div>
+  <div class="card-body p-0">
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>اسم الامتحان</th>
+            <th>الموعد</th>
+            <th>المكان</th>
+            <th>الحد الأقصى</th>
+            <th>الرسوم</th>
+            <th>الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if exams %} {% for e in exams %}
+          <tr>
+            <td>{{ e.ExamID }}</td>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <div class="exam-icon">
+                  <i class="bi bi-clipboard2-check-fill"></i>
+                </div>
+                <strong>{{ e.ExamName }}</strong>
+              </div>
+            </td>
+            <td>
+              <span class="badge bg-primary">
+                <i class="bi bi-calendar-fill me-1"></i>
+                {{ e.ExamDate }}
+              </span>
+            </td>
+            <td>{{ e.Location or '—' }}</td>
+            <td>
+              <span class="badge bg-info text-dark">
+                {{ e.MaxStudents or '—' }} طالب
+              </span>
+            </td>
+            <td>
+              <span class="badge bg-warning text-dark">
+                {{ e.Fee or '—' }} ل.س
+              </span>
+            </td>
+            <td>
+              <a
+                href="{{ url_for('admin_delete_exam', exam_id=e.ExamID) }}"
+                class="btn btn-sm btn-danger"
+                onclick="return confirm('هل أنت متأكد من حذف هذا الامتحان؟');"
+              >
+                <i class="bi bi-trash-fill"></i>
+                حذف
+              </a>
+            </td>
+          </tr>
+          {% endfor %} {% else %}
+          <tr>
+            <td colspan="7" class="text-center py-5 text-muted">
+              <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+              لا توجد امتحانات مضافة حتى الآن
+            </td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

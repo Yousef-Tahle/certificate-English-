@@ -1,0 +1,104 @@
+{% extends 'base.html' %} {% block title %}إصدار شهادة جديدة{% endblock %} {%
+block content %}
+
+<!-- عنوان الصفحة -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="page-header mb-0">
+    <h4 class="page-title">
+      <i class="bi bi-award-fill me-2"></i>
+      إصدار شهادة جديدة
+    </h4>
+    <span class="page-sub">أصدر شهادة لطالب ناجح</span>
+  </div>
+  <a href="{{ url_for('admin_certificates') }}" class="btn btn-outline-primary">
+    <i class="bi bi-arrow-right"></i>
+    رجوع
+  </a>
+</div>
+
+<!-- فورم الإضافة -->
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-award-fill"></i>
+        بيانات الشهادة
+      </div>
+      <div class="card-body p-4">
+        <form method="POST">
+          <div class="row g-3">
+            <!-- اختيار الطالب -->
+            <div class="col-md-6">
+              <label class="form-label">الطالب الناجح</label>
+              <select name="student_id" class="form-select" required>
+                <option value="">-- اختر الطالب --</option>
+                {% for s in students %}
+                <option value="{{ s.StudentID }}">{{ s.FullName }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- اختيار الامتحان -->
+            <div class="col-md-6">
+              <label class="form-label">الامتحان</label>
+              <select name="exam_id" class="form-select" required>
+                <option value="">-- اختر الامتحان --</option>
+                {% for e in exams %}
+                <option value="{{ e.ExamID }}">{{ e.ExamName }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- رقم الشهادة -->
+            <div class="col-md-6">
+              <label class="form-label">رقم الشهادة</label>
+              <input
+                type="text"
+                name="cert_number"
+                class="form-control"
+                placeholder="مثال: CERT-2026-001"
+                required
+              />
+            </div>
+
+            <!-- المستوى -->
+            <div class="col-md-6">
+              <label class="form-label">المستوى</label>
+              <select name="level" class="form-select">
+                <option value="">-- اختر المستوى --</option>
+                <option value="A1">A1 - مبتدئ</option>
+                <option value="A2">A2 - أساسي</option>
+                <option value="B1">B1 - متوسط</option>
+                <option value="B2">B2 - فوق المتوسط</option>
+                <option value="C1">C1 - متقدم</option>
+                <option value="C2">C2 - احترافي</option>
+              </select>
+            </div>
+
+            <!-- تاريخ الإصدار -->
+            <div class="col-md-6">
+              <label class="form-label">تاريخ الإصدار</label>
+              <input type="date" name="issue_date" class="form-control" />
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-award-fill"></i>
+              إصدار الشهادة
+            </button>
+            <a
+              href="{{ url_for('admin_certificates') }}"
+              class="btn btn-outline-secondary"
+            >
+              <i class="bi bi-x-circle"></i>
+              إلغاء
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

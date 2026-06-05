@@ -1,0 +1,61 @@
+{% extends 'base.html' %} {% block title %}تسجيل الدخول{% endblock %} {% block
+content %}
+<div class="row justify-content-center mt-5">
+  <div class="col-md-5">
+    <!-- كرت تسجيل الدخول -->
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-box-arrow-in-right"></i>
+        تسجيل الدخول إلى النظام
+      </div>
+      <div class="card-body p-4">
+        <!-- رسالة الخطأ -->
+        {% if error %}
+        <div class="alert-custom alert-danger mb-4">
+          <div class="alert-icon">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+          </div>
+          <span>{{ error }}</span>
+        </div>
+        {% endif %}
+
+        <!-- فورم تسجيل الدخول -->
+        <form method="POST">
+          <div class="mb-3">
+            <label class="form-label">
+              <i class="bi bi-person-fill me-1"></i>
+              اسم المستخدم
+            </label>
+            <input
+              type="text"
+              name="username"
+              class="form-control"
+              placeholder="أدخل اسم المستخدم"
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label">
+              <i class="bi bi-lock-fill me-1"></i>
+              كلمة المرور
+            </label>
+            <input
+              type="password"
+              name="password"
+              class="form-control"
+              placeholder="أدخل كلمة المرور"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-box-arrow-in-right"></i>
+            دخول
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
