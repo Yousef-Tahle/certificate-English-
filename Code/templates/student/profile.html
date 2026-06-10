@@ -1,0 +1,110 @@
+{% extends 'base.html' %} {% block title %}ملفي الشخصي{% endblock %} {% block
+content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="page-header mb-0">
+    <h4 class="page-title">
+      <i class="bi bi-person-fill me-2"></i>
+      ملفي الشخصي
+    </h4>
+    <span class="page-sub">عرض وتعديل بياناتك الشخصية</span>
+  </div>
+  <a href="{{ url_for('student_dashboard') }}" class="btn btn-outline-primary">
+    <i class="bi bi-arrow-right"></i>
+    رجوع
+  </a>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <!-- بطاقة المعلومات -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="bi bi-person-circle"></i>
+        معلوماتي
+      </div>
+      <div class="card-body">
+        <div class="d-flex align-items-center gap-4 mb-4">
+          <div class="profile-avatar">{{ student.FullName[0] }}</div>
+          <div>
+            <div class="profile-name">{{ student.FullName }}</div>
+            <div class="profile-username">
+              <i class="bi bi-person-fill me-1"></i>
+              {{ student.Username }}
+            </div>
+            <span class="badge bg-primary mt-1">طالب</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- فورم التعديل -->
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-pencil-square"></i>
+        تعديل البيانات
+      </div>
+      <div class="card-body p-4">
+        <form method="POST">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">الاسم الكامل</label>
+              <input
+                type="text"
+                name="fullname"
+                class="form-control"
+                value="{{ student.FullName }}"
+                required
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">البريد الإلكتروني</label>
+              <input
+                type="email"
+                name="email"
+                class="form-control"
+                value="{{ student.Email or '' }}"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">رقم الهاتف</label>
+              <input
+                type="text"
+                name="phone"
+                class="form-control"
+                value="{{ student.Phone or '' }}"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">تاريخ الميلاد</label>
+              <input
+                type="date"
+                class="form-control"
+                value="{{ student.BirthDate or '' }}"
+                disabled
+              />
+              <small class="text-muted">تاريخ الميلاد لا يمكن تعديله</small>
+            </div>
+            <div class="col-12">
+              <label class="form-label">العنوان</label>
+              <input
+                type="text"
+                name="address"
+                class="form-control"
+                value="{{ student.Address or '' }}"
+              />
+            </div>
+          </div>
+          <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-check-circle-fill"></i>
+              حفظ التعديلات
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

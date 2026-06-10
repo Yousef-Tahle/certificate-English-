@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}تعديل الشهادة{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="page-header mb-0">
+        <h4 class="page-title">
+            <i class="bi bi-pencil-square me-2"></i>
+            تعديل الشهادة
+        </h4>
+        <span class="page-sub">تعديل شهادة {{ cert.FullName }}</span>
+    </div>
+    <a href="{{ url_for('admin_certificates') }}" class="btn btn-outline-primary">
+        <i class="bi bi-arrow-right"></i>
+        رجوع
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-award-fill"></i>
+                تعديل البيانات
+            </div>
+            <div class="card-body p-4">
+
+                <!-- معلومات ثابتة -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label">الطالب</label>
+                        <input type="text" class="form-control"
+                               value="{{ cert.FullName }}" disabled>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">الامتحان</label>
+                        <input type="text" class="form-control"
+                               value="{{ cert.ExamName }}" disabled>
+                    </div>
+                </div>
+
+                <form method="POST">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">رقم الشهادة</label>
+                            <input type="text" name="cert_number" class="form-control"
+                                   value="{{ cert.CertNumber }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">المستوى</label>
+                            <select name="level" class="form-select">
+                                <option value="">-- اختر المستوى --</option>
+                                <option value="A1" {{ 'selected' if cert.Level == 'A1' }}>A1 - مبتدئ</option>
+                                <option value="A2" {{ 'selected' if cert.Level == 'A2' }}>A2 - أساسي</option>
+                                <option value="B1" {{ 'selected' if cert.Level == 'B1' }}>B1 - متوسط</option>
+                                <option value="B2" {{ 'selected' if cert.Level == 'B2' }}>B2 - فوق المتوسط</option>
+                                <option value="C1" {{ 'selected' if cert.Level == 'C1' }}>C1 - متقدم</option>
+                                <option value="C2" {{ 'selected' if cert.Level == 'C2' }}>C2 - احترافي</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">تاريخ الإصدار</label>
+                            <input type="date" name="issue_date" class="form-control"
+                                   value="{{ cert.IssueDate or '' }}">
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle-fill"></i>
+                            حفظ التعديلات
+                        </button>
+                        <a href="{{ url_for('admin_certificates') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle"></i>
+                            إلغاء
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -668,3 +668,63 @@ body {
   border-top: 1px solid var(--border);
   padding-top: 12px;
 }
+
+/* ========================================
+   الملف الشخصي
+======================================== */
+.profile-avatar {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, var(--navy-mid), var(--navy-light));
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 800;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(26, 58, 92, 0.25);
+}
+.profile-name {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--navy);
+}
+.profile-username {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin-top: 2px;
+}
+/* ========================================
+   كرت اختيار الدورة/الامتحان
+======================================== */
+.course-select-card {
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+.course-select-card input[type="radio"] {
+  display: none;
+}
+.course-select-card label {
+  display: block;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.course-select-card label:hover {
+  background: #f8fafc;
+}
+.course-select-card input[type="radio"]:checked + label {
+  background: rgba(37, 99, 168, 0.06);
+  border-color: var(--navy-light);
+}
+.course-select-card:has(input:checked) {
+  border-color: var(--navy-light);
+  box-shadow: 0 0 0 3px rgba(37, 99, 168, 0.1);
+}
+.fw-700 {
+  font-weight: 700;
+}

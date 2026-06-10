@@ -85,7 +85,56 @@ def admin_dashboard():
 def student_dashboard():
     if "user_id" not in session or session["role"] != "Student":
         return redirect(url_for("login"))
-    return render_template("student/dashboard.html")
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    # جيب الـ StudentID
+    cursor.execute(
+        "SELECT StudentID FROM Students WHERE UserID=?", (session["user_id"],)
+    )
+    student = cursor.fetchone()
+
+    courses_count = 0
+    exams_count = 0
+    certs_count = 0
+
+    if student:
+        cursor.execute(
+            """
+            SELECT COUNT(*) FROM Registrations
+            WHERE StudentID=? AND CourseID IS NOT NULL
+        """,
+            (student.StudentID,),
+        )
+        courses_count = cursor.fetchone()[0]
+
+        cursor.execute(
+            """
+            SELECT COUNT(*) FROM Registrations
+            WHERE StudentID=? AND ExamID IS NOT NULL
+        """,
+            (student.StudentID,),
+        )
+        exams_count = cursor.fetchone()[0]
+
+        cursor.execute(
+            """
+            SELECT COUNT(*) FROM Certificates
+            WHERE StudentID=?
+        """,
+            (student.StudentID,),
+        )
+        certs_count = cursor.fetchone()[0]
+
+    conn.close()
+
+    return render_template(
+        "student/dashboard.html",
+        courses_count=courses_count,
+        exams_count=exams_count,
+        certs_count=certs_count,
+    )
 
 
 # ========== إدارة الطلاب ==========
@@ -169,6 +218,49 @@ def admin_delete_student(student_id):
     return redirect(url_for("admin_students"))
 
 
+# ========== تعديل طالب ==========
+@app.route("/admin/students/edit/<int:student_id>", methods=["GET", "POST"])
+def admin_edit_student(student_id):
+    if "user_id" not in session or session["role"] != "Admin":
+        return redirect(url_for("login"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    if request.method == "POST":
+        fullname = request.form["fullname"]
+        email = request.form["email"]
+        phone = request.form["phone"]
+        birthdate = request.form["birthdate"]
+        address = request.form["address"]
+
+        cursor.execute(
+            """
+            UPDATE Students
+            SET FullName=?, Email=?, Phone=?, BirthDate=?, Address=?
+            WHERE StudentID=?
+        """,
+            (fullname, email, phone, birthdate, address, student_id),
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for("admin_students"))
+
+    # جيب بيانات الطالب الحالية
+    cursor.execute(
+        """
+        SELECT s.*, u.Username FROM Students s
+        JOIN Users u ON s.UserID = u.UserID
+        WHERE s.StudentID = ?
+    """,
+        (student_id,),
+    )
+    student = cursor.fetchone()
+    conn.close()
+
+    return render_template("admin/edit_student.html", student=student)
+
+
 # ========== إدارة الدورات ==========
 @app.route("/admin/courses")
 def admin_courses():
@@ -230,6 +322,43 @@ def admin_delete_course(course_id):
     return redirect(url_for("admin_courses"))
 
 
+# ========== تعديل دورة ==========
+@app.route("/admin/courses/edit/<int:course_id>", methods=["GET", "POST"])
+def admin_edit_course(course_id):
+    if "user_id" not in session or session["role"] != "Admin":
+        return redirect(url_for("login"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    if request.method == "POST":
+        name = request.form["name"]
+        description = request.form["description"]
+        duration = request.form["duration"]
+        price = request.form["price"]
+        start_date = request.form["start_date"]
+        end_date = request.form["end_date"]
+
+        cursor.execute(
+            """
+            UPDATE Courses
+            SET CourseName=?, Description=?, Duration=?,
+                Price=?, StartDate=?, EndDate=?
+            WHERE CourseID=?
+        """,
+            (name, description, duration, price, start_date, end_date, course_id),
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for("admin_courses"))
+
+    cursor.execute("SELECT * FROM Courses WHERE CourseID=?", (course_id,))
+    course = cursor.fetchone()
+    conn.close()
+
+    return render_template("admin/edit_course.html", course=course)
+
+
 # ========== إدارة الامتحانات ==========
 @app.route("/admin/exams")
 def admin_exams():
@@ -253,7 +382,7 @@ def admin_add_exam():
 
     if request.method == "POST":
         name = request.form["name"]
-        exam_date = request.form["exam_date"]
+        exam_date = request.form["exam_date"].replace("T", " ")
         location = request.form["location"]
         max_students = request.form["max_students"]
         fee = request.form["fee"]
@@ -288,6 +417,43 @@ def admin_delete_exam(exam_id):
     conn.close()
 
     return redirect(url_for("admin_exams"))
+
+
+# ========== تعديل امتحان ==========
+@app.route("/admin/exams/edit/<int:exam_id>", methods=["GET", "POST"])
+def admin_edit_exam(exam_id):
+    if "user_id" not in session or session["role"] != "Admin":
+        return redirect(url_for("login"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    if request.method == "POST":
+        name = request.form["name"]
+        exam_date = request.form["exam_date"].replace("T", " ")
+        location = request.form["location"]
+        max_students = request.form["max_students"]
+        fee = request.form["fee"]
+
+        cursor.execute(
+            """
+            UPDATE Exams
+            SET ExamName=?, ExamDate=?, Location=?,
+                MaxStudents=?, Fee=?
+            WHERE ExamID=?
+        """,
+            (name, exam_date, location, max_students, fee, exam_id),
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for("admin_exams"))
+
+    cursor.execute("SELECT * FROM Exams WHERE ExamID=?", (exam_id,))
+    exam = cursor.fetchone()
+    conn.close()
+
+    return render_template("admin/edit_exam.html", exam=exam)
+
 
 # ========== إدارة النتائج ==========
 @app.route("/admin/results")
@@ -546,9 +712,9 @@ def student_certificates():
     return render_template("student/certificates.html", certificates=certificates)
 
 
-# ========== تسجيل في دورة أو امتحان ==========
-@app.route("/student/register", methods=["GET", "POST"])
-def student_register():
+# ========== تسجيل في دورة فقط ==========
+@app.route("/student/register/course", methods=["GET", "POST"])
+def student_register_course():
     if "user_id" not in session or session["role"] != "Student":
         return redirect(url_for("login"))
 
@@ -561,29 +727,184 @@ def student_register():
     student = cursor.fetchone()
 
     if request.method == "POST" and student:
-        course_id = request.form.get("course_id") or None
-        exam_id = request.form.get("exam_id") or None
-
+        course_id = request.form["course_id"]
         cursor.execute(
             """
-            INSERT INTO Registrations (StudentID, CourseID, ExamID)
-            VALUES (?, ?, ?)
+            INSERT INTO Registrations (StudentID, CourseID)
+            VALUES (?, ?)
         """,
-            (student.StudentID, course_id, exam_id),
+            (student.StudentID, course_id),
         )
         conn.commit()
         conn.close()
-
         return redirect(url_for("student_dashboard"))
 
-    cursor.execute("SELECT CourseID, CourseName FROM Courses")
+    cursor.execute("SELECT CourseID, CourseName, Duration, Price FROM Courses")
     courses = cursor.fetchall()
-
-    cursor.execute("SELECT ExamID, ExamName FROM Exams")
-    exams = cursor.fetchall()
-
     conn.close()
-    return render_template("student/register.html", courses=courses, exams=exams)
+
+    return render_template("student/register_course.html", courses=courses)
+
+
+# ========== تسجيل في امتحان فقط ==========
+@app.route("/student/register/exam", methods=["GET", "POST"])
+def student_register_exam():
+    if "user_id" not in session or session["role"] != "Student":
+        return redirect(url_for("login"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT StudentID FROM Students WHERE UserID=?", (session["user_id"],)
+    )
+    student = cursor.fetchone()
+
+    if request.method == "POST" and student:
+        exam_id = request.form["exam_id"]
+        cursor.execute(
+            """
+            INSERT INTO Registrations (StudentID, ExamID)
+            VALUES (?, ?)
+        """,
+            (student.StudentID, exam_id),
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for("student_dashboard"))
+
+    cursor.execute("SELECT ExamID, ExamName, ExamDate, Location, Fee FROM Exams")
+    exams = cursor.fetchall()
+    conn.close()
+
+    return render_template("student/register_exam.html", exams=exams)
+
+
+# ========== الملف الشخصي للطالب ==========
+@app.route("/student/profile", methods=["GET", "POST"])
+def student_profile():
+    if "user_id" not in session or session["role"] != "Student":
+        return redirect(url_for("login"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    if request.method == "POST":
+        fullname = request.form["fullname"]
+        email = request.form["email"]
+        phone = request.form["phone"]
+        address = request.form["address"]
+
+        cursor.execute(
+            """
+            UPDATE Students
+            SET FullName=?, Email=?, Phone=?, Address=?
+            WHERE UserID=?
+        """,
+            (fullname, email, phone, address, session["user_id"]),
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for("student_profile"))
+
+    cursor.execute(
+        """
+        SELECT s.*, u.Username FROM Students s
+        JOIN Users u ON s.UserID = u.UserID
+        WHERE s.UserID=?
+    """,
+        (session["user_id"],),
+    )
+    student = cursor.fetchone()
+    conn.close()
+
+    return render_template("student/profile.html", student=student)
+
+
+# ========== تعديل نتيجة ==========
+@app.route("/admin/results/edit/<int:result_id>", methods=["GET", "POST"])
+def admin_edit_result(result_id):
+    if "user_id" not in session or session["role"] != "Admin":
+        return redirect(url_for("login"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    if request.method == "POST":
+        score = request.form["score"]
+        grade = request.form["grade"]
+        is_passed = 1 if request.form.get("is_passed") else 0
+        result_date = request.form["result_date"]
+
+        cursor.execute(
+            """
+            UPDATE Results
+            SET Score=?, Grade=?, IsPassed=?, ResultDate=?
+            WHERE ResultID=?
+        """,
+            (score, grade, is_passed, result_date, result_id),
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for("admin_results"))
+
+    # جيب بيانات النتيجة الحالية
+    cursor.execute(
+        """
+        SELECT r.*, s.FullName, e.ExamName
+        FROM Results r
+        JOIN Students s ON r.StudentID = s.StudentID
+        JOIN Exams e ON r.ExamID = e.ExamID
+        WHERE r.ResultID=?
+    """,
+        (result_id,),
+    )
+    result = cursor.fetchone()
+    conn.close()
+
+    return render_template("admin/edit_result.html", result=result)
+
+
+# ========== تعديل شهادة ==========
+@app.route("/admin/certificates/edit/<int:cert_id>", methods=["GET", "POST"])
+def admin_edit_certificate(cert_id):
+    if "user_id" not in session or session["role"] != "Admin":
+        return redirect(url_for("login"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    if request.method == "POST":
+        cert_number = request.form["cert_number"]
+        level = request.form["level"]
+        issue_date = request.form["issue_date"]
+
+        cursor.execute(
+            """
+            UPDATE Certificates
+            SET CertNumber=?, Level=?, IssueDate=?
+            WHERE CertID=?
+        """,
+            (cert_number, level, issue_date, cert_id),
+        )
+        conn.commit()
+        conn.close()
+        return redirect(url_for("admin_certificates"))
+
+    cursor.execute(
+        """
+        SELECT c.*, s.FullName, e.ExamName
+        FROM Certificates c
+        JOIN Students s ON c.StudentID = s.StudentID
+        JOIN Exams e ON c.ExamID = e.ExamID
+        WHERE c.CertID=?
+    """,
+        (cert_id,),
+    )
+    cert = cursor.fetchone()
+    conn.close()
+
+    return render_template("admin/edit_certificate.html", cert=cert)
 
 
 # ========== هاد دايماً آخر سطر ==========

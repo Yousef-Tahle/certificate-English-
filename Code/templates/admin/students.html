@@ -8,7 +8,7 @@ content %}
       <i class="bi bi-people-fill me-2"></i>
       إدارة الطلاب
     </h4>
-    <span class="page-sub">عرض وإدارة كل الطلاب المسجلين بالنظام</span>
+    <span class="page-sub">عرض وإدارة جميع الطلاب المسجلين بالنظام</span>
   </div>
   <a href="{{ url_for('admin_add_student') }}" class="btn btn-primary">
     <i class="bi bi-plus-circle-fill"></i>
@@ -23,7 +23,64 @@ content %}
     قائمة الطلاب
   </div>
   <div class="card-body p-0">
-    <div class="table-wrapper"></div>
+    <div class="table-wrapper">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>الاسم الكامل</th>
+            <th>اسم المستخدم</th>
+            <th>البريد الإلكتروني</th>
+            <th>الهاتف</th>
+            <th>تاريخ الميلاد</th>
+            <th>الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if students %} {% for s in students %}
+          <tr>
+            <td>{{ s.StudentID }}</td>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <div class="student-avatar">{{ s.FullName[0] }}</div>
+                {{ s.FullName }}
+              </div>
+            </td>
+            <td><span class="badge bg-secondary">{{ s.Username }}</span></td>
+            <td>{{ s.Email or '—' }}</td>
+            <td>{{ s.Phone or '—' }}</td>
+            <td>{{ s.BirthDate or '—' }}</td>
+            <td>
+              <div class="d-flex gap-1">
+                <a
+                  href="{{ url_for('admin_edit_student', student_id=s.StudentID) }}"
+                  class="btn btn-sm btn-warning"
+                >
+                  <i class="bi bi-pencil-fill"></i>
+                  تعديل
+                </a>
+                <a
+                  href="{{ url_for('admin_delete_student', student_id=s.StudentID) }}"
+                  class="btn btn-sm btn-danger"
+                  onclick="return confirm('هل أنت متأكد من حذف هذا الطالب؟');"
+                >
+                  <i class="bi bi-trash-fill"></i>
+                  حذف
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %} {% else %}
+          <tr>
+            <td colspan="7" class="text-center py-5 text-muted">
+              <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+              لا يوجد طلاب مسجلين حتى الآن
+            </td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 {% endblock %}

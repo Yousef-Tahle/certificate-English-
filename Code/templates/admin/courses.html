@@ -63,14 +63,23 @@ content %}
             <td>{{ c.StartDate or '—' }}</td>
             <td>{{ c.EndDate or '—' }}</td>
             <td>
-              <a
-                href="{{ url_for('admin_delete_course', course_id=c.CourseID) }}"
-                class="btn btn-sm btn-danger"
-                onclick="return confirm('هل أنت متأكد من حذف هذه الدورة؟');"
-              >
-                <i class="bi bi-trash-fill"></i>
-                حذف
-              </a>
+              <div class="d-flex gap-1">
+                <a
+                  href="{{ url_for('admin_edit_course', course_id=c.CourseID) }}"
+                  class="btn btn-sm btn-warning"
+                >
+                  <i class="bi bi-pencil-fill"></i>
+                  تعديل
+                </a>
+                <a
+                  href="{{ url_for('admin_delete_course', course_id=c.CourseID) }}"
+                  class="btn btn-sm btn-danger"
+                  onclick="return confirm('هل أنت متأكد من حذف هذه الدورة؟');"
+                >
+                  <i class="bi bi-trash-fill"></i>
+                  حذف
+                </a>
+              </div>
             </td>
           </tr>
           {% endfor %} {% else %}
